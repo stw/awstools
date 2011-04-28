@@ -10,7 +10,7 @@ A simple gem to provide aws command line tools, currently only snapshots.  snaps
 
 == Usage
 
-snapshot -v volume-id -k 2 -d "Some Description" -q 
+  snapshot -v volume-id -k 2 -d "Some Description" -q 
 
 Creates a snapshot of volume-id, and deletes all snapshots except for the current and the last most recent.
 
@@ -18,14 +18,27 @@ Creates a snapshot of volume-id, and deletes all snapshots except for the curren
 
 Ensure you set your amazon keys.
 
-export EC2_PRIVATE_KEY=/path/to/private_key.pem 
-export EC2_CERT=/path/to/cert.pem
+  export EC2_PRIVATE_KEY=/path/to/private_key.pem 
+  export EC2_CERT=/path/to/cert.pem
 
-gem install awstools
+  gem install awstools
 
-snapshot -v volume-id -k 2 -d "Some Description"
+  snapshot -v volume-id -k 2 -d "Some Description"
 
-snapshot --help for params
+  snapshot --help for params
+
+  options:
+
+  Usage:
+       snapshots [options]
+
+  where [options] are:
+       --volume, -v <s>:   Volume to snapshot
+         --keep, -k <i>:   Snapshots to keep (default: 2)
+  --description, -d <s>:   Snapshot description
+            --quiet, -q:   Don't print anything
+         --simulate, -s:   Simulate, nothing created
+             --help, -h:   Show this message
 
 == Reason
 

@@ -9,18 +9,28 @@ require 'AWS'
 # create a daily snapshot, keep the last 2
 # 0 0 * * * /path/to/snapshots.rb -v volume-id -k 7 -d "Some Snapshot Description"  
 
-options = Trollop::options do 
-  banner = "Take a snapshot of a volume and keep the latest <keep> snapshots, removing the rest"
+options = Trollop::options do
+  banner <<-EOS
+Take a snapshot of a volume and keep the latest <keep> snapshots, removing the rest
+
+Usage:
+       snapshots [options]
+
+where [options] are:
+EOS
+  
   opt :volume,      "Volume to snapshot",   :type => String,  :short => 'v', :required => true
   opt :keep,        "Snapshots to keep",    :type => :int,    :short => 'k', :default => 2
   opt :description, "Snapshot description", :type => String,  :short => 'd'
   opt :quiet,       "Don't print anything", :short => 'q'
+  opt :simulate,    "Simulate, nothing created", :short => 's'
 end
 
 volume      = options[:volume] 
 keep        = options[:keep] 
 description = options[:description] || '' 
-quiet       = options[:quiet] || false 
+quiet       = options[:quiet] || false
+simulate    = options[:simulate] || false
 
 @ec2 = AWS::EC2::Base.new(
   :access_key_id      => ENV['AMAZON_ACCESS_KEY_ID'], 
@@ -28,7 +38,13 @@ quiet       = options[:quiet] || false
 
 quiet or puts "Create new snapshot."
 quiet or puts "Volume: #{volume} Description: #{description}"
-@ec2.create_snapshot(:volume_id => volume, :description => description)
+begin 
+  simulate or @ec2.create_snapshot(:volume_id => volume, :description => description)
+rescue Exception => e
+  puts "Error: #{e.message}"
+  puts "Exiting"
+  exit
+end
 
 snapshots = @ec2.describe_snapshots(:filter_names => ['volume-id'], :filter_values => [volume]) 
 snapshots = snapshots["snapshotSet"]["item"]
@@ -47,7 +63,13 @@ snapshots.each do |s|
   quiet or puts "volumeId:    #{s.volumeId}"
   quiet or puts "startTime:   #{s.startTime}" 
   quiet or puts
-  @ec2.delete_snapshot(:snapshot_id => s.snapshotId)
+  begin 
+    simulate or @ec2.delete_snapshot(:snapshot_id => s.snapshotId)
+  rescue Exception => e
+    puts "Error: #{e.message}"
+    puts "Exiting"
+    exit
+  end
 end
 
 quiet or puts "Done."
