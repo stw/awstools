@@ -41,7 +41,7 @@ Ensure you set your amazon keys.
          --keep, -k <i>:   Snapshots to keep (default: 2)
   --description, -d <s>:   Snapshot description
             --quiet, -q:   Don't print anything
-         --simulate, -s:   Simulate, nothing created
+         --simulate, -s:   Simulate, nothing created/deleted
              --help, -h:   Show this message
 
 == Reason

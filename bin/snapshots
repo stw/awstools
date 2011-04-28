@@ -23,7 +23,7 @@ EOS
   opt :keep,        "Snapshots to keep",    :type => :int,    :short => 'k', :default => 2
   opt :description, "Snapshot description", :type => String,  :short => 'd'
   opt :quiet,       "Don't print anything", :short => 'q'
-  opt :simulate,    "Simulate, nothing created", :short => 's'
+  opt :simulate,    "Simulate, nothing created/deleted", :short => 's'
 end
 
 volume      = options[:volume] 
