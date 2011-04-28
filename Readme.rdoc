@@ -4,6 +4,10 @@
 
 This is very beta, use at your own risk. That said, I am using it production.
 
+Until my filter patch gets pulled, you'll need to use this version of amazon-ec2:
+
+    https://github.com/stw/amazon-ec2/tree/add_filters_to_snapshots
+
 == Description
 
 A simple gem to provide aws command line tools, currently only snapshots.  snapshots allows you to create snapshots from volumes on aws and deletes snapshots greater than the keep parameter.
