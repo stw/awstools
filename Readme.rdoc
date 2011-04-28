@@ -1,0 +1,49 @@
+= AWS tools
+
+== Note
+
+This is very beta, use at your own risk. That said, I am using it production.
+
+== Description
+
+A simple gem to provide aws command line tools, currently only snapshots.  snapshots allows you to create snapshots from volumes on aws and deletes snapshots greater than the keep parameter.
+
+== Usage
+
+snapshot -v volume-id -k 2 -d "Some Description" -q 
+
+Creates a snapshot of volume-id, and deletes all snapshots except for the current and the last most recent.
+
+== Installation 
+
+Ensure you set your amazon keys.
+
+export EC2_PRIVATE_KEY=/path/to/private_key.pem 
+export EC2_CERT=/path/to/cert.pem
+
+gem install awstools
+
+snapshot -v volume-id -k 2 -d "Some Description"
+
+snapshot --help for params
+
+== Reason
+
+I looked for a simple tool to do this and didn't find anything I liked so I put this together.
+
+== Contact
+
+Comments, patches, Git pull requests and bug reports are welcome. Send an email to swalker@walkertek.com
+
+== Patches & Pull Requests
+
+Please follow these steps if you want to send a patch or a GitHub pull request:
+
+* Fork stw/awstools
+* Create a topic branch: `git checkout -b my_fix`
+* Make sure you add tests for your changes and that they all pass with 'rake test'
+* Don't change files that you don't own like the gemspec or version.rb
+* Commit your changes, one change/fix per commit
+* Push your fixes branch: `git push origin my_fix`
+* Open an Issue on GitHub referencing your branch and send a pull request.
+* Please do not push to `master` on your fork. Using a feature/bugfix branch will make everyone’s life easier.

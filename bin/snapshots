@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby 
+# swalker@walkertek.com - 2011-04-27  
+
+require 'rubygems'
+require 'trollop'
+require 'AWS' 
+
+# from cron  
+# create a daily snapshot, keep the last 2
+# 0 0 * * * /path/to/snapshots.rb -v volume-id -k 7 -d "Some Snapshot Description"  
+
+options = Trollop::options do 
+  banner = "Take a snapshot of a volume and keep the latest <keep> snapshots, removing the rest"
+  opt :volume,      "Volume to snapshot",   :type => String,  :short => 'v', :required => true
+  opt :keep,        "Snapshots to keep",    :type => :int,    :short => 'k', :default => 2
+  opt :description, "Snapshot description", :type => String,  :short => 'd'
+  opt :quiet,       "Don't print anything", :short => 'q'
+end
+
+volume      = options[:volume] 
+keep        = options[:keep] 
+description = options[:description] || '' 
+quiet       = options[:quiet] || false 
+
+@ec2 = AWS::EC2::Base.new(
+  :access_key_id      => ENV['AMAZON_ACCESS_KEY_ID'], 
+  :secret_access_key  => ENV['AMAZON_SECRET_ACCESS_KEY'])
+
+quiet or puts "Create new snapshot."
+quiet or puts "Volume: #{volume} Description: #{description}"
+@ec2.create_snapshot(:volume_id => volume, :description => description)
+
+snapshots = @ec2.describe_snapshots(:filter_names => ['volume-id'], :filter_values => [volume]) 
+snapshots = snapshots["snapshotSet"]["item"]
+
+# sort by startTime desc
+snapshots = snapshots.sort {|a,b| b.startTime <=> a.startTime }
+
+# how many to remove, slices off end of array
+remove    = (snapshots.count - keep.to_i) 
+snapshots = snapshots.slice(-remove, remove)  
+
+snapshots.each do |s|
+  quiet or puts "Removing..."
+  quiet or puts "Description: #{s.description}"
+  quiet or puts "snapshotId:  #{s.snapshotId}"
+  quiet or puts "volumeId:    #{s.volumeId}"
+  quiet or puts "startTime:   #{s.startTime}" 
+  quiet or puts
+  @ec2.delete_snapshot(:snapshot_id => s.snapshotId)
+end
+
+quiet or puts "Done."
+
