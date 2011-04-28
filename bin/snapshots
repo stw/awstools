@@ -56,7 +56,7 @@ snapshots = snapshots.sort {|a,b| b.startTime <=> a.startTime }
 remove    = (snapshots.count - keep.to_i) 
 snapshots = snapshots.slice(-remove, remove)  
 
-snapshots.each do |s|
+snapshots && snapshots.each do |s|
   quiet or puts "Removing..."
   quiet or puts "Description: #{s.description}"
   quiet or puts "snapshotId:  #{s.snapshotId}"
