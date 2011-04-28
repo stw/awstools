@@ -14,7 +14,7 @@ A simple gem to provide aws command line tools, currently only snapshots.  snaps
 
 == Usage
 
-  snapshot -v volume-id -k 2 -d "Some Description" -q 
+  snapshots -v volume-id -k 2 -d "Some Description" -q 
 
 Creates a snapshot of volume-id, and deletes all snapshots except for the current and the last most recent.
 
@@ -63,4 +63,6 @@ Please follow these steps if you want to send a patch or a GitHub pull request:
 * Commit your changes, one change/fix per commit
 * Push your fixes branch: `git push origin my_fix`
 * Open an Issue on GitHub referencing your branch and send a pull request.
-* Please do not push to `master` on your fork. Using a feature/bugfix branch will make everyone’s life easier.
+* Please do not push to `master` on your fork. Using a feature/bugfix branch will make everyone’s life easier. 
+
+
