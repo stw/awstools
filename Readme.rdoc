@@ -18,6 +18,12 @@ A simple gem to provide aws command line tools, currently only snapshots.  snaps
 
 Creates a snapshot of volume-id, and deletes all snapshots except for the current and the last most recent.
 
+If you're using rvm and want to run it from cron you have to do something like this:
+
+    0 0 * * * /bin/bash -l -c 'snapshots -v vol-b99865d2 -d "GF Snap"'
+
+This ensures rvm is loaded before running the script.
+
 == Installation 
 
 Ensure you set your amazon keys.
