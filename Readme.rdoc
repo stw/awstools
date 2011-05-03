@@ -20,7 +20,7 @@ Creates a snapshot of volume-id, and deletes all snapshots except for the curren
 
 If you're using rvm and want to run it from cron you have to do something like this:
 
-    0 0 * * * /bin/bash -l -c 'snapshots -v vol-b99865d2 -d "GF Snap"'
+    0 0 * * * /bin/bash -l -c 'snapshots -v volume-id -d "Some Description"'
 
 This ensures rvm is loaded before running the script.
 
